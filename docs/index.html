@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation System</title>
+    <link rel="stylesheet" href="https://pyscript.net/snapshots/2024.9.2/core.css"/>
+    <script type="module" src="https://pyscript.net/snapshots/2024.9.2/core.js"></script>
+
+    <style>
+        body{
+            font-family:'Times New Roman', Times, serif;
+            display:flex;
+            flex-direction:column;
+            justify-content:flex-start;
+            text-align:center;
+        }
+        .title{
+            padding-top:20px;
+            padding-bottom:20px;
+        }
+        py-script {
+            display : none;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">
+        <h1>Movie Recommendation System</h1>
+        <h3>by Artech_girls</h3>
+    </div>
+    <p>Enter your favorite genre and actor to get movie recommendations:</p>
+
+    <div>
+        <input id="input_genre" type="text" placeholder="Enter genre">
+        <input id="input_actor" type="text" placeholder="Enter actor">
+        <button id="add_text" pys-onClick="function_add_text">Get Recommendations</button>
+    </div>
+
+    <h3>Recommendations:</h3>
+    <div id="output_text"></div>
+
+    <py-script>
+        from pyodide.http import open_url
+
+        try :
+            # Fetch and execute the Python script from GitHub
+            exec(open_url("https://raw.githubusercontent.com/Siyun37/movie-recommendation/main/movie_recommendation.py").read())
+            print("Script loaded successfully.")
+        except Exception as e :
+            print(f"Error loading script: {e}")
+
+
+        # Example function to interact with HTML
+        def function_add_text():
+            input_genre = Element("input_genre").element.value
+            input_actor = Element("input_actor").element.value
+            recommendations = recommend_movies(input_genre, input_actor, top_n=5)
+            Element("output_text").element.innerHTML = recommendations.to_html(index=False, escape=False)
+    </py-script>
+</body>
+</html>
